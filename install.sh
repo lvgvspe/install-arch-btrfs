@@ -11,7 +11,7 @@ fi
 
 # Configurar o layout do teclado
 echo "Configurando o layout do teclado para US."
-loadkeys us
+loadkeys br-abnt
 
 # Verificar conexão com a internet
 echo "Verificando conexão com a internet..."
