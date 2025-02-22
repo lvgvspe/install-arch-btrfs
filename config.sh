@@ -39,7 +39,7 @@ passwd $USERNAME
 
 # Instalar pacotes adicionais (opcional)
 echo "Instalando pacotes adicionais (opcional)..."
-pacman -S networkmanager sudo vim --noconfirm
+pacman -S networkmanager sudo nano --noconfirm
 
 # Habilitar o NetworkManager
 echo "Habilitando o NetworkManager..."
