@@ -19,7 +19,7 @@ Este repositório contém um script em Bash para automatizar a instalação do A
 3. **Baixe e Execute o Script**:
    - Execute o seguinte comando para baixar e rodar o script diretamente:
      ```bash
-     curl -sSL https://raw.githubusercontent.com/lvgvspe/install-arch-btrfs/main/install.sh | bash
+     curl -sSL https://raw.githubusercontent.com/lvgvspe/install-arch-btrfs/main/install.sh -o install.sh && bash install.sh
      ```
    - Substitua a URL pelo link direto do seu script no GitHub.
 
