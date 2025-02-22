@@ -83,4 +83,6 @@ genfstab -U /mnt >> /mnt/etc/fstab
 
 # Entrar no sistema instalado (chroot)
 echo "Entrando no sistema instalado (chroot)..."
+echo "Execute o seguinte script para continuar a configuração:"
+echo "curl -sSL https://raw.githubusercontent.com/lvgvspe/install-arch-btrfs/main/config.sh -o config.sh && bash config.sh"
 arch-chroot /mnt 
