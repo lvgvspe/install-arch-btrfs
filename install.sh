@@ -60,12 +60,22 @@ mkfs.btrfs -f ${DISK}2
 # Montar partições
 echo "Montando partições..."
 mount ${DISK}2 /mnt
-mkdir /mnt/boot
-mount ${DISK}1 /mnt/boot
+
+# Criar subvolumes btrfs
+btrfs subvolume create /mnt/@
+btrfs subvolume create /mnt/@home
+umount -R /mnt
+
+# Remontar btrfs
+mount -o compress=zstd,subvol=@ ${DISK}2 /mnt
+mkdir -p /mnt/home
+mount -o compress=zstd,subvol=@home ${DISK}2 /mnt/home
+mkdir -p /mnt/efi
+mount ${DISK}1 /mnt/efi
 
 # Instalar o sistema base
 echo "Instalando o sistema base..."
-pacstrap /mnt base linux linux-firmware btrfs-progs
+pacstrap -K /mnt base base-devel linux linux-firmware git btrfs-progs grub efibootmgr grub-btrfs inotify-tools timeshift vim networkmanager pipewire pipewire-alsa pipewire-pulse pipewire-jack wireplumber reflector zsh zsh-completions zsh-autosuggestions openssh man sudo
 
 # Gerar fstab
 echo "Gerando fstab..."
@@ -73,70 +83,4 @@ genfstab -U /mnt >> /mnt/etc/fstab
 
 # Entrar no sistema instalado (chroot)
 echo "Entrando no sistema instalado (chroot)..."
-arch-chroot /mnt <<EOF
-
-# Configurar o fuso horário
-echo "Configurando o fuso horário para America/Sao_Paulo..."
-ln -sf /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime
-hwclock --systohc
-
-# Configurar o locale
-echo "Configurando o locale para pt_BR.UTF-8..."
-echo "pt_BR.UTF-8 UTF-8" >> /etc/locale.gen
-locale-gen
-echo "LANG=pt_BR.UTF-8" > /etc/locale.conf
-
-# Configurar o layout do teclado
-echo "Configurando o layout do teclado para BR-ABNT2..."
-echo "KEYMAP=br-abnt2" > /etc/vconsole.conf
-
-# Configurar o hostname
-echo "Por favor, insira o nome do host:"
-read HOSTNAME
-echo $HOSTNAME > /etc/hostname
-
-# Configurar a rede
-echo "Configurando a rede..."
-echo "127.0.0.1   localhost" >> /etc/hosts
-echo "::1         localhost" >> /etc/hosts
-echo "127.0.1.1   $HOSTNAME.localdomain $HOSTNAME" >> /etc/hosts
-
-# Definir senha do root
-echo "Definindo a senha do root..."
-passwd
-
-# Instalar o GRUB (bootloader)
-echo "Instalando o GRUB..."
-pacman -S grub --noconfirm
-grub-install --target=i386-pc $DISK
-grub-mkconfig -o /boot/grub/grub.cfg
-
-# Instalar pacotes adicionais (opcional)
-echo "Instalando pacotes adicionais (opcional)..."
-pacman -S networkmanager sudo vim --noconfirm
-
-# Habilitar o NetworkManager
-echo "Habilitando o NetworkManager..."
-systemctl enable NetworkManager
-
-# Criar um novo usuário
-echo "Criando um novo usuário..."
-echo "Por favor, insira o nome de usuário:"
-read USERNAME
-useradd -m -G wheel -s /bin/bash $USERNAME
-echo "Por favor, defina uma senha para o novo usuário:"
-passwd $USERNAME
-
-# Configurar o sudo para o novo usuário
-echo "Configurando o sudo para o novo usuário..."
-echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers
-
-EOF
-
-# Finalizar a instalação
-echo "Instalação concluída!"
-echo "Desmontando partições..."
-umount -R /mnt
-echo "Agora você pode reiniciar o sistema:"
-echo "1. Digite 'exit' para sair do ambiente chroot."
-echo "2. Execute 'reboot' para reiniciar o sistema."
+arch-chroot /mnt 
