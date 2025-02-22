@@ -9,16 +9,16 @@ sudo pacman -S --needed git base-devel && git clone https://aur.archlinux.org/ya
 # Install "timeshift-autosnap", a configurable pacman hook which automatically makes snapshots before pacman upgrades.
 yay -S timeshift-autosnap
 
-sudo pacman -S plasma-desktop plasma-pa plasma-nm plasma-systemmonitor plasma-firewall plasma-browser-integration kscreen kwalletmanager kwallet-pam bluedevil powerdevil power-profiles-daemon kdeplasma-addons xdg-desktop-portal-kde xwaylandvideobridge kde-gtk-config breeze-gtk cups print-manager konsole dolphin ffmpegthumbs firefox kate okular gwenview ark pinta spectacle dragon
+yay -S plasma-desktop plasma-pa plasma-nm plasma-systemmonitor plasma-firewall plasma-browser-integration kscreen kwalletmanager kwallet-pam bluedevil powerdevil power-profiles-daemon kdeplasma-addons xdg-desktop-portal-kde xwaylandvideobridge kde-gtk-config breeze-gtk cups print-manager konsole dolphin ffmpegthumbs firefox kate okular gwenview ark pinta spectacle dragon
 
 # Install SDDM
-sudo pacman -S sddm
+yay -S sddm
 
 # Enable SDDM service to make it start on boot
 sudo systemctl enable sddm
 
 # If using KDE I suggest installing this to control the SDDM configuration from the KDE settings App
-pacman -S --needed sddm-kcm
+yay -S --needed sddm-kcm
 
 # Now it's time to reboot the system
-reboot
+echo "Now it's time to reboot the system
