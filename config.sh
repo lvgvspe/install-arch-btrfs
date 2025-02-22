@@ -33,7 +33,9 @@ passwd
 # Instalar o bootloader (GRUB)
 echo "Instalando o GRUB..."
 pacman -S grub
-grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB  
+echo "Por favor, insira o disco que deseja instalar o GRUB (ex: /dev/sda):"
+read DISK
+grub-install --target=i386-pc $DISK
 grub-mkconfig -o /boot/grub/grub.cfg
 
 # Finalizar a instalação
