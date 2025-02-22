@@ -1,3 +1,4 @@
+
 # Configurar o fuso horário
 echo "Configurando o fuso horário para America/Sao_Paulo..."
 ln -sf /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime
@@ -38,7 +39,7 @@ passwd $USERNAME
 
 # Instalar pacotes adicionais (opcional)
 echo "Instalando pacotes adicionais (opcional)..."
-pacman -S networkmanager sudo nano --noconfirm
+pacman -S networkmanager sudo vim --noconfirm
 
 # Habilitar o NetworkManager
 echo "Habilitando o NetworkManager..."
