@@ -21,4 +21,4 @@ sudo systemctl enable sddm
 yay -S --needed sddm-kcm
 
 # Now it's time to reboot the system
-echo "Now it's time to reboot the system
+echo "Now it's time to reboot the system"
