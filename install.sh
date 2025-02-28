@@ -3,6 +3,16 @@
 # Script de Instalação do Arch Linux
 # Baseado em: https://gist.github.com/mjkstra/96ce7a5689d753e7a6bdd92cdc169bae
 
+# Função para determinar o sufixo da partição
+get_partition_suffix() {
+    local disk=$1
+    if [[ $disk == *"nvme"* ]]; then
+        echo "p"
+    else
+        echo ""
+    fi
+}
+
 # Verificar se o usuário é root
 if [[ $EUID -ne 0 ]]; then
    echo "Este script deve ser executado como root."
@@ -33,6 +43,8 @@ lsblk
 echo "Por favor, insira o disco que deseja particionar (ex: /dev/sda):"
 read DISK
 
+SUFFIX=$(get_partition_suffix "$DISK")
+
 echo "Deseja usar particionamento GPT? (s/n)"
 read GPT
 
@@ -54,12 +66,12 @@ parted $DISK mkpart primary 513MiB 100%
 
 # Formatar partições
 echo "Formatando partições..."
-mkfs.fat -F32 ${DISK}1
-mkfs.btrfs -f ${DISK}2
+mkfs.fat -F32 ${DISK}${SUFFIX}1
+mkfs.btrfs -f ${DISK}${SUFFIX}2
 
 # Montar partições
 echo "Montando partições..."
-mount ${DISK}2 /mnt
+mount ${DISK}${SUFFIX}2 /mnt
 
 # Criar subvolumes btrfs
 btrfs subvolume create /mnt/@
@@ -67,11 +79,11 @@ btrfs subvolume create /mnt/@home
 umount -R /mnt
 
 # Remontar btrfs
-mount -o compress=zstd,subvol=@ ${DISK}2 /mnt
+mount -o compress=zstd,subvol=@ ${DISK}${SUFFIX}2 /mnt
 mkdir -p /mnt/home
-mount -o compress=zstd,subvol=@home ${DISK}2 /mnt/home
+mount -o compress=zstd,subvol=@home ${DISK}${SUFFIX}2 /mnt/home
 mkdir -p /mnt/efi
-mount ${DISK}1 /mnt/efi
+mount ${DISK}${SUFFIX}1 /mnt/efi
 
 # Instalar o sistema base
 echo "Instalando o sistema base..."
